@@ -6,7 +6,7 @@ module.exports = defineConfig({
       rules: [
         {
           test: /\.graphql$/,
-          use: 'graphql-tag/loader'
+          use: 'graphql-tag/loader',
         }
       ]
     }

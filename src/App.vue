@@ -4,15 +4,42 @@
     <ApolloQuery :query="require('@/graphql/queries/Categories.js').default">
       <template slot-scope="{ result: { data, loading }, isLoading }">
         <div v-if="isLoading">Loading...{{loading}}</div>
-        <ul v-else>
-          <li
+        <div v-else>
+          <a href="#" 
             v-for="category of data.categories"
-            class="user"
+            class="link-margin"
             :key="category.id"
-          >{{ category.name }}</li>
-        </ul>
+            @click="selectCategory(category.id)"
+          >{{ category.name }}</a>
+        </div>
       </template>
     </ApolloQuery>
+
+    <!-- Apollo Query -->
+    <!-- <ApolloQuery :query="require('@/graphql/queries/Books.js').default">
+      <template slot-scope="{ result: { data, loading }, isLoading }">
+        <div v-if="isLoading">Loading...{{loading}}</div>
+        <div v-else>
+          <div v-for="book of data.books"
+            class="link-margin"
+            :key="book.id"
+          >{{ book.id }}. {{ book.title }}</div>
+        </div>
+      </template>
+    </ApolloQuery> -->
+
+    <ApolloQuery :query="require('@/graphql/queries/Category.js').default" :variables="{id: selectedCategory}">
+      <template slot-scope="{ result: { data, loading }, isLoading }">
+        <div v-if="isLoading">Loading...{{loading}}</div>
+        <div v-else>
+          <div v-for="book of data.category.books"
+            class="link-margin"
+            :key="book.id"
+          >{{ book.id }}. {{ book.title }}</div>
+        </div>
+      </template>
+    </ApolloQuery>
+
   </div>
 </template>
 
@@ -22,12 +49,17 @@ export default {
   name: 'App',
   data(){
     return {
-      categories: []
+      selectedCategory: 1
     }
   },
   components: {
 
   },
+  methods: {
+    selectCategory(id){
+      this.selectedCategory = id;
+    }
+  }
 }
 </script>
 
@@ -37,5 +69,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  text-align: center;
 }
+.link-margin {
+    margin-right: 24px;
+  }
 </style>
+
