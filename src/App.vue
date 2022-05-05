@@ -1,13 +1,23 @@
 <template>
   <div id="app">
-    Tet
+    <!-- Apollo Query -->
+    <ApolloQuery :query="require('@/graphql/queries/Categories.js').default">
+      <template slot-scope="{ result: { data, loading }, isLoading }">
+        <div v-if="isLoading">Loading...{{loading}}</div>
+        <ul v-else>
+          <li
+            v-for="category of data.categories"
+            class="user"
+            :key="category.id"
+          >{{ category.name }}</li>
+        </ul>
+      </template>
+    </ApolloQuery>
   </div>
 </template>
 
 <script>
-import gql from 'graphql-tag'
 //import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
   data(){
@@ -17,15 +27,6 @@ export default {
   },
   components: {
 
-  },
-  apollo: {
-    // Simple query that will update the 'hello' vue property
-    categories: gql`query {
-      categories{
-        name
-        id
-      }
-    }`,
   },
 }
 </script>
