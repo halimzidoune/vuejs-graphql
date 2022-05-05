@@ -5,40 +5,55 @@
       <template slot-scope="{ result: { data, loading }, isLoading }">
         <div v-if="isLoading">Loading...{{loading}}</div>
         <div v-else>
+          <a href="#"
+            class="link-margin"
+            @click.prevent="selectCategory('all')"
+          >All</a>
+
+          <a href="#"
+            class="link-margin"
+            @click.prevent="selectCategory('featured')"
+          >Fetured</a>
+
           <a href="#" 
             v-for="category of data.categories"
             class="link-margin"
             :key="category.id"
-            @click="selectCategory(category.id)"
+            @click.prevent="selectCategory(category.id)"
           >{{ category.name }}</a>
         </div>
       </template>
     </ApolloQuery>
 
-    <!-- Apollo Query -->
-    <!-- <ApolloQuery :query="require('@/graphql/queries/Books.js').default">
-      <template slot-scope="{ result: { data, loading }, isLoading }">
-        <div v-if="isLoading">Loading...{{loading}}</div>
-        <div v-else>
-          <div v-for="book of data.books"
-            class="link-margin"
-            :key="book.id"
-          >{{ book.id }}. {{ book.title }}</div>
-        </div>
-      </template>
-    </ApolloQuery> -->
+    <div v-if="(selectedCategory == 'all') || (selectedCategory == 'featured')">
+      <!-- Apollo Query -->
+      <ApolloQuery :query="require('@/graphql/queries/'+fileQuery+'.js').default">
+        <template slot-scope="{ result: { data, loading }, isLoading }">
+          <div v-if="isLoading">Loading...{{loading}}</div>
+          <div v-else>
+            <div v-for="book of data.books"
+              class="link-margin"
+              :key="book.id"
+            >{{ book.id }}. {{ book.title }}</div>
+          </div>
+        </template>
+      </ApolloQuery>
+    </div>
 
-    <ApolloQuery :query="require('@/graphql/queries/Category.js').default" :variables="{id: selectedCategory}">
-      <template slot-scope="{ result: { data, loading }, isLoading }">
-        <div v-if="isLoading">Loading...{{loading}}</div>
-        <div v-else>
-          <div v-for="book of data.category.books"
-            class="link-margin"
-            :key="book.id"
-          >{{ book.id }}. {{ book.title }}</div>
-        </div>
-      </template>
-    </ApolloQuery>
+    <div v-else>
+      <ApolloQuery :query="require('@/graphql/queries/'+fileQuery+'.js').default" :variables="{id: selectedCategory}">
+        <template slot-scope="{ result: { data, loading }, isLoading }">
+          <div v-if="isLoading">Loading...{{loading}}</div>
+          <div v-else>
+            <div v-for="book of data.category.books"
+              class="link-margin"
+              :key="book.id"
+            >{{ book.id }}. {{ book.title }}</div>
+          </div>
+        </template>
+      </ApolloQuery>
+    </div>
+    
 
   </div>
 </template>
@@ -49,7 +64,8 @@ export default {
   name: 'App',
   data(){
     return {
-      selectedCategory: 1
+      selectedCategory: 'all',
+      fileQuery: 'Category'
     }
   },
   components: {
@@ -57,6 +73,13 @@ export default {
   },
   methods: {
     selectCategory(id){
+      if(id=="all"){
+        this.fileQuery = 'Books';
+      }else if (id=="featured") {
+        this.fileQuery = 'FeaturedBooks';        
+      }else{
+        this.fileQuery = 'Category';
+      }
       this.selectedCategory = id;
     }
   }
