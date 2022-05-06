@@ -25,9 +25,11 @@
       </template>
     </ApolloQuery>
 
-    <div v-if="(selectedCategory == 'all') || (selectedCategory == 'featured')">
+    <div v-if="fileQuery == 'Books'">
+      <p>{{ selectedCategory }} - {{ fileQuery }}</p>
+
       <!-- Apollo Query -->
-      <ApolloQuery :query="require('@/graphql/queries/'+fileQuery+'.js').default">
+      <ApolloQuery :query="require('@/graphql/queries/'+fileQuery+'.js').default" >
         <template slot-scope="{ result: { data, loading }, isLoading }">
           <div v-if="isLoading">Loading...{{loading}}</div>
           <div v-else>
@@ -40,7 +42,23 @@
       </ApolloQuery>
     </div>
 
-    <div v-else>
+    <div v-if="fileQuery == 'FeaturedBooks'">
+      <p>{{ selectedCategory }} - {{ fileQuery }}</p>
+      
+      <ApolloQuery :query="require('@/graphql/queries/'+fileQuery+'.js').default" :variables="{ featured: true }">
+        <template slot-scope="{ result: { data, loading }, isLoading }">
+          <div v-if="isLoading">Loading...{{loading}}</div>
+          <div v-else>
+            <div v-for="book of data.booksByFeatured"
+              class="link-margin"
+              :key="book.id"
+            >{{ book.id }}. {{ book.title }}</div>
+          </div>
+        </template>
+      </ApolloQuery>
+    </div>
+    <div v-if="fileQuery == 'Category'">
+      <p>{{ selectedCategory }} - {{ fileQuery }}</p>
       <ApolloQuery :query="require('@/graphql/queries/'+fileQuery+'.js').default" :variables="{id: selectedCategory}">
         <template slot-scope="{ result: { data, loading }, isLoading }">
           <div v-if="isLoading">Loading...{{loading}}</div>
@@ -65,7 +83,7 @@ export default {
   data(){
     return {
       selectedCategory: 'all',
-      fileQuery: 'Category'
+      fileQuery: 'Books'
     }
   },
   components: {
@@ -76,7 +94,7 @@ export default {
       if(id=="all"){
         this.fileQuery = 'Books';
       }else if (id=="featured") {
-        this.fileQuery = 'FeaturedBooks';        
+        this.fileQuery = 'FeaturedBooks';
       }else{
         this.fileQuery = 'Category';
       }

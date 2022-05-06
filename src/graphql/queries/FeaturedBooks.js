@@ -1,8 +1,8 @@
 
 import gql from 'graphql-tag';
 
-export default gql`query($featured: Boolean!) {
-  booksByFeatured(featured: $featured) {
+export default gql`query {
+  booksByFeatured(featured: true) {
     id
     title
     author
