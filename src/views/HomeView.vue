@@ -31,10 +31,16 @@
         <template slot-scope="{ result: { data, loading }, isLoading }">
           <div v-if="isLoading">Loading...{{loading}}</div>
           <div v-else>
-            <div v-for="book of data.books"
-              class="link-margin"
-              :key="book.id"
-            >{{ book.id }}. {{ book.title }}</div>
+            <div v-for="book of data.books" :key="book.id">
+              <router-link :to="`/book/${book.id}`" 
+                class="link-margin"
+              >{{ book.id }}. {{ book.title }}
+              </router-link>
+              <div>
+                {{ book.author }}
+              </div>
+              <img :src="`${book.image}`" alt="cover">
+            </div>
           </div>
         </template>
       </ApolloQuery>
@@ -47,10 +53,16 @@
         <template slot-scope="{ result: { data, loading }, isLoading }">
           <div v-if="isLoading">Loading...{{loading}}</div>
           <div v-else>
-            <div v-for="book of data.booksByFeatured"
-              class="link-margin"
-              :key="book.id"
-            >{{ book.id }}. {{ book.title }}</div>
+          <div v-for="book of data.booksByFeatured" :key="book.id">
+              <router-link :to="`/book/${book.id}`" 
+                class="link-margin"
+              >{{ book.id }}. {{ book.title }}
+              </router-link>
+              <div>
+                {{ book.author }}
+              </div>
+              <img :src="`${book.image}`" alt="cover">
+            </div>
           </div>
         </template>
       </ApolloQuery>
@@ -62,15 +74,21 @@
         <template slot-scope="{ result: { data, loading }, isLoading }">
           <div v-if="isLoading">Loading...{{loading}}</div>
           <div v-else>
-            <div v-for="book of data.category.books"
-              class="link-margin"
-              :key="book.id"
-            >{{ book.id }}. {{ book.title }}</div>
+            <div v-for="book of data.category.books" :key="book.id">
+              <router-link :to="`/book/${book.id}`" 
+                class="link-margin"
+              >{{ book.id }}. {{ book.title }}
+              </router-link>
+              <div>
+                {{ book.author }}
+              </div>
+              <img :src="`${book.image}`" alt="cover">
+            </div>
           </div>
         </template>
       </ApolloQuery>
     </div>
-    
+
   </div>
 </template>
 
