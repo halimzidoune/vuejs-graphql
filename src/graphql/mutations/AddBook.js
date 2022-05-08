@@ -16,7 +16,7 @@ export default gql`mutation(
     link: $link
     description: $description
     featured: $featured
-    category: $category
+    category_id: $category
   ) {
     id
     title

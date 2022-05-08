@@ -1,5 +1,9 @@
 <template>
   <div class="home">
+
+    <router-link to="/books/add" >
+      Create Book  
+    </router-link>
     <ApolloQuery :query="require('@/graphql/queries/Categories.js').default">
       <template slot-scope="{ result: { data, loading }, isLoading }">
         <div v-if="isLoading">Loading...{{loading}}</div>
